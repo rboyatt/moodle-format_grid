@@ -148,9 +148,9 @@ class restore_format_grid_plugin extends restore_format_plugin {
                 'Could not insert icon. Grid format table format_grid_icon is not ready. An administrator must visit the notifications section.');
             }
         } else {
-            global $PAGE;
             $old = $DB->get_record('format_grid_icon', array('courseid' => $data->courseid, 'sectionid' => $data->sectionid));
-            if ((is_null($old->image)) && (strcmp($PAGE->pagetype, 'backup-restore') == 0)) {
+            // Always update missing icons during restore / import except merge into existing course currently doesn't restore the images
+            if (is_null($old->image)) {
                 // Update the record to use this icon as we are restoring not importing and no icon exists already.
                 $data->id = $old->id;
                 if (!$DB->update_record('format_grid_icon', $data)) {
